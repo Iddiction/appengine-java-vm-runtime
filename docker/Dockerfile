@@ -15,9 +15,14 @@
 FROM google/debian:wheezy
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get -q update && \
-    apt-get -y -q --no-install-recommends install ca-certificates curl openjdk-7-jre-headless wget && \
+    apt-get -y -q --no-install-recommends install ca-certificates curl openjdk-7-jre-headless wget net-tools procps gawk ssh && \
     apt-get clean && \
     rm /var/lib/apt/lists/*_*
+
+# YourKit profiling
+RUN mkdir -p /var/lib/yourkit/
+RUN curl -0 https://github.com/Iddiction/appengine-java-vm-runtime/raw/master/yourkit/linux-x86-64/libyjpagent.so -o /var/lib/yourkit/libyjpagent.so
+ADD . /var/lib/yourkit/
 
 RUN mkdir -p /var/lib/jetty
 RUN curl -0 http://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.2.5.v20141112/jetty-distribution-9.2.5.v20141112.tar.gz | tar -C /var/lib/jetty --strip-components=1 -zx
@@ -36,6 +41,8 @@ WORKDIR /app
 EXPOSE 8080
 # Java VM debug port number
 EXPOSE 5005
+# Java VM JMX profiler port number
+EXPOSE 1099
 # Env variable used by the jetty_run.sh script
 ENV RUNTIME_DIR /var/lib/jetty
 
