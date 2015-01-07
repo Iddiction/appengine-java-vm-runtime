@@ -21,7 +21,7 @@ RUN apt-get -q update && \
 
 # YourKit profiling
 RUN mkdir -p /var/lib/yourkit/
-RUN curl -0 https://github.com/Iddiction/appengine-java-vm-runtime/raw/master/yourkit/linux-x86-64/libyjpagent.so -o /var/lib/yourkit/libyjpagent.so
+RUN curl -0 https://raw.githubusercontent.com/Iddiction/appengine-java-vm-runtime/master/yourkit/linux-x86-64/libyjpagent.so -o /var/lib/yourkit/libyjpagent.so
 ADD . /var/lib/yourkit/
 
 RUN mkdir -p /var/lib/jetty
